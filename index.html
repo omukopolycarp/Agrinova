@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIPLO AGRINOVA | Empowering Smart Farming in Africa</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="favicon.png" type="image/png">
+  <meta name="theme-color" content="#198754">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="logo.png" alt="Agrinova Logo" width="45" height="45" class="me-2 rounded-circle">
+        <span class="fw-bold text-success fs-4">DIPLO AGRINOVA</span>
+      </a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="menu">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
+          <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+          <li class="nav-item"><a href="#services" class="nav-link">Services</a></li>
+          <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero d-flex align-items-center text-center text-white" id="home">
+    <div class="container">
+      <img src="logo.png" alt="Agrinova Logo" width="90" class="mb-3 hero-logo">
+      <h1 class="fw-bold display-5">Empowering Smart Farming in Africa</h1>
+      <p class="lead">Digital tools, IoT, and AI solutions driving sustainable agriculture.</p>
+      <a href="#contact" class="btn btn-success btn-lg mt-3">Get Started</a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="py-5 bg-light" id="about">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6 mb-4 mb-md-0">
+          <img src="img/about.jpg" alt="About Agrinova" class="img-fluid rounded-4 shadow-sm">
+        </div>
+        <div class="col-md-6">
+          <h2 class="fw-bold text-success mb-3">Who We Are</h2>
+          <p class="lead">Diplo Agrinova is an agricultural technology company uniting farmers with digital tools to boost productivity and sustainability through innovation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="py-5" id="services">
+    <div class="container text-center">
+      <h2 class="fw-bold text-success mb-5">Our Smart Services</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm">
+            <img src="img/service1.jpg" class="card-img-top rounded-top-4" alt="Smart Monitoring">
+            <div class="card-body">
+              <h4 class="text-success">🌾 Smart Crop Monitoring</h4>
+              <p>AI-powered monitoring with real-time weather, 7-day forecasts, and intelligent farming advice.</p>
+              <a href="/smart-monitoring" class="btn btn-success btn-sm">Access Dashboard</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm">
+            <img src="img/service2.jpg" class="card-img-top rounded-top-4" alt="IoT Devices">
+            <div class="card-body">
+              <h4 class="text-success">🚜 IoT Automation</h4>
+              <p>Smart irrigation and drone mapping tools for efficient farming.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm">
+            <img src="img/service3.jpg" class="card-img-top rounded-top-4" alt="Sustainability">
+            <div class="card-body">
+              <h4 class="text-success">🌍 Eco-Friendly Farming</h4>
+              <p>Reduce waste and promote sustainable agricultural practices.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+<!-- 🌍 Sustainability Slab -->
+<div class="sustainability-slab" onclick="openSustainabilityPopup()">
+  <h2>🌍 Sustainability</h2>
+  <p>Eco-Friendly Farming — Tap to learn how AgriNova promotes sustainable agriculture.</p>
+</div>
+
+<!-- 🌱 Popup Modal -->
+<div id="sustainabilityPopup" class="popup-overlay">
+  <div class="popup-content">
+    <span class="close-btn" onclick="closeSustainabilityPopup()">&times;</span>
+    <h2>🌍 Sustainability at AgriNova</h2>
+    <p>We believe in eco-friendly farming that nurtures the earth and feeds the future.
+       AgriNova promotes sustainable agriculture through smart irrigation, waste reduction,
+       and renewable energy initiatives.</p>
+
+    <div class="eco-icons">
+      <div><i class="fa-solid fa-recycle"></i><p>Waste Reduction</p></div>
+      <div><i class="fa-solid fa-seedling"></i><p>Organic Growth</p></div>
+      <div><i class="fa-solid fa-solar-panel"></i><p>Renewable Energy</p></div>
+      <div><i class="fa-solid fa-water"></i><p>Water Conservation</p></div>
+    </div>
+
+    <a href="sustainability.html" class="btn-learn">Learn More</a>
+  </div>
+</div>
+
+<style>
+/* --- Popup overlay --- */
+.popup-overlay {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7);
+}
+
+/* --- Popup content --- */
+.popup-content {
+  background: #fff;
+  color: #333;
+  width: 80%;
+  max-width: 600px;
+  margin: 8% auto;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  animation: popupSlideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: translateY(100px);
+  opacity: 0;
+}
+
+.popup-content.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+@keyframes popupSlideUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* --- Close button --- */
+.close-btn {
+  float: right;
+  font-size: 24px;
+  color: #333;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.close-btn:hover {
+  color: #e74c3c;
+}
+
+/* --- Icons layout --- */
+.eco-icons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.eco-icons div {
+  text-align: center;
+}
+
+.eco-icons i {
+  font-size: 32px;
+  color: #27ae60;
+}
+
+.btn-learn {
+  display: inline-block;
+  background: #27ae60;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.btn-learn:hover {
+  background: #219150;
+}
+</style>
+
+<!-- Font Awesome (for icons) -->
+<script src="https://kit.fontawesome.com/a2e0e6a61b.js" crossorigin="anonymous"></script>
+
+
+  </section>
+
+  <!-- CONTACT -->
+  <section class="py-5 bg-light" id="contact">
+    <div class="container text-center">
+      <h2 class="fw-bold text-success mb-4">Get in Touch</h2>
+      <form id="contactForm" class="col-md-6 mx-auto">
+        <input type="text" class="form-control mb-3" placeholder="Full Name" required>
+        <input type="email" class="form-control mb-3" placeholder="Email Address" required>
+        <textarea class="form-control mb-3" rows="4" placeholder="Your Message" required></textarea>
+        <button type="submit" class="btn btn-success w-100">Send Message</button>
+        <div id="responseMsg" class="mt-3"></div>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-success text-white text-center py-4">
+    <p class="mb-0">&copy; 2025 DIPLO AGRINOVA | Smart Farming for a Better Future 🌿</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

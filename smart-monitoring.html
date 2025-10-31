@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Crop Monitoring - DIPLO AGRINOVA</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .monitoring-dashboard {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        .weather-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        .ai-advice-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px;
+        }
+        .health-analyzer {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px;
+        }
+        .monitoring-steps {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px;
+        }
+        .step-number {
+            background: #28a745;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .weather-icon {
+            font-size: 3rem;
+            margin: 10px 0;
+        }
+        .forecast-item {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 10px;
+            margin: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="logo.png" alt="Agrinova Logo" width="45" height="45" class="me-2 rounded-circle">
+                <span class="fw-bold text-success fs-4">DIPLO AGRINOVA</span>
+            </a>
+            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="menu">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="index.html#about" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="index.html#services" class="nav-link">Services</a></li>
+                    <li class="nav-item"><a href="index.html#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="monitoring-dashboard">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-4">
+                    <h1 class="text-white fw-bold mb-3">
+                        <i class="fas fa-seedling me-3"></i>
+                        Smart Crop Monitoring Dashboard
+                    </h1>
+                    <p class="text-white lead">AI-Powered Farming Intelligence for Optimal Crop Management</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Weather Monitoring -->
+                <div class="col-lg-6">
+                    <div class="weather-card">
+                        <h3 class="text-success mb-3">
+                            <i class="fas fa-cloud-sun me-2"></i>
+                            Real-Time Weather & 7-Day Forecast
+                        </h3>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div id="current-weather" class="text-center">
+                                    <div class="weather-icon" id="weather-icon">⛅</div>
+                                    <h4 id="temperature">--°C</h4>
+                                    <p id="weather-description">Loading...</p>
+                                    <div class="row text-center mt-3">
+                                        <div class="col-6">
+                                            <i class="fas fa-tint text-primary"></i>
+                                            <br><small>Humidity</small>
+                                            <br><span id="humidity">--%</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <i class="fas fa-wind text-info"></i>
+                                            <br><small>Wind Speed</small>
+                                            <br><span id="wind-speed">-- km/h</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>7-Day Forecast</h5>
+                                <div id="forecast-container">
+                                    <div class="forecast-item">
+                                        <small>Loading forecast...</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-success w-100 mt-3" onclick="getLocation()" id="location-btn">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            <span id="location-btn-text">Get Weather for My Location</span>
+                        </button>
+
+                        <div class="mt-2 small text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Uses Open-Meteo API for accurate weather data
+                        </div>
+
+                        <!-- Real-time hourly data -->
+                        <div id="realtime-container" class="mt-3" style="display: none;">
+                            <h6>Next 24 Hours Real-Time Data:</h6>
+                            <div class="row">
+                                <!-- Hourly data will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Farming Advisor -->
+                <div class="col-lg-6">
+                    <div class="ai-advice-card">
+                        <h3 class="mb-3">
+                            <i class="fas fa-robot me-2"></i>
+                            AI Farming Advisor
+                        </h3>
+
+                        <form id="ai-advice-form">
+                            <div class="mb-3">
+                                <label class="form-label">Crop Type</label>
+                                <select class="form-control" id="crop-type" required>
+                                    <option value="">Select crop...</option>
+                                    <option value="maize">Maize/Corn</option>
+                                    <option value="wheat">Wheat</option>
+                                    <option value="rice">Rice</option>
+                                    <option value="tomatoes">Tomatoes</option>
+                                    <option value="potatoes">Potatoes</option>
+                                    <option value="beans">Beans</option>
+                                    <option value="cassava">Cassava</option>
+                                    <option value="sorghum">Sorghum</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Soil Conditions</label>
+                                <textarea class="form-control" id="soil-conditions" rows="2" placeholder="Describe soil type, pH, moisture level..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-light w-100">
+                                <i class="fas fa-brain me-2"></i>
+                                Get AI Recommendations
+                            </button>
+                        </form>
+
+                        <div id="ai-advice-result" class="mt-3" style="display: none;">
+                            <h5>AI Recommendations:</h5>
+                            <div id="recommendations-list"></div>
+                            <div id="alerts-section" class="mt-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <!-- AI Health Analyzer -->
+                <div class="col-lg-6">
+                    <div class="health-analyzer">
+                        <h3 class="mb-3">
+                            <i class="fas fa-stethoscope me-2"></i>
+                            AI Crop Health Analyzer
+                        </h3>
+
+                        <form id="health-analyze-form">
+                            <div class="mb-3">
+                                <label class="form-label">Crop Symptoms (Optional - describe what you observe)</label>
+                                <textarea class="form-control" id="crop-symptoms" rows="2" placeholder="Yellowing leaves, spots, wilting, pests..."></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Upload or Snap Crop Image</label>
+                                <div class="d-flex gap-2 mb-2">
+                                    <input type="file" class="form-control" id="crop-image" accept="image/*" style="flex: 1;">
+                                    <button type="button" class="btn btn-outline-primary" onclick="openCamera()">
+                                        <i class="fas fa-camera me-1"></i>
+                                        Snap
+                                    </button>
+                                </div>
+                                <div id="image-preview" class="mt-2" style="display: none;">
+                                    <img id="preview-img" class="img-fluid rounded" style="max-height: 200px;">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Environmental Factors</label>
+                                <textarea class="form-control" id="environmental-factors" rows="2" placeholder="Recent weather, irrigation, fertilization..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-light w-100">
+                                <i class="fas fa-microscope me-2"></i>
+                                Analyze Health
+                            </button>
+                        </form>
+
+                        <div id="health-analysis-result" class="mt-3" style="display: none;">
+                            <div id="analysis-loading" class="text-center mb-3">
+                                <div class="spinner-border text-success" role="status">
+                                    <span class="visually-hidden">Analyzing...</span>
+                                </div>
+                                <p class="mt-2">AI is analyzing your crop image...</p>
+                            </div>
+                            <div id="diagnosis-result"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step-by-Step Monitoring Guide -->
+                <div class="col-lg-6">
+                    <div class="monitoring-steps">
+                        <h3 class="text-success mb-3">
+                            <i class="fas fa-list-check me-2"></i>
+                            Step-by-Step Crop Monitoring Guide
+                        </h3>
+
+                        <div class="monitoring-step mb-3">
+                            <span class="step-number">1</span>
+                            <strong>Daily Visual Inspection</strong>
+                            <p class="mb-1">Walk through your fields early morning or late afternoon to check for:</p>
+                            <ul class="small">
+                                <li>Leaf discoloration or spots</li>
+                                <li>Wilting or drooping plants</li>
+                                <li>Pest activity or damage</li>
+                                <li> Weed competition</li>
+                            </ul>
+                        </div>
+
+                        <div class="monitoring-step mb-3">
+                            <span class="step-number">2</span>
+                            <strong>Soil Moisture Check</strong>
+                            <p class="mb-1">Use a soil moisture meter or check soil by hand:</p>
+                            <ul class="small">
+                                <li>Insert finger 2-3 inches into soil</li>
+                                <li>Soil should be moist but not waterlogged</li>
+                                <li>Check multiple locations in field</li>
+                                <li>Record readings for irrigation planning</li>
+                            </ul>
+                        </div>
+
+                        <div class="monitoring-step mb-3">
+                            <span class="step-number">3</span>
+                            <strong>Weather Monitoring</strong>
+                            <p class="mb-1">Track local weather conditions:</p>
+                            <ul class="small">
+                                <li>Temperature fluctuations</li>
+                                <li>Rainfall amounts and timing</li>
+                                <li>Humidity levels</li>
+                                <li>Wind conditions</li>
+                            </ul>
+                        </div>
+
+                        <div class="monitoring-step mb-3">
+                            <span class="step-number">4</span>
+                            <strong>Growth Stage Assessment</strong>
+                            <p class="mb-1">Monitor crop development:</p>
+                            <ul class="small">
+                                <li>Germination rates</li>
+                                <li>Plant height and vigor</li>
+                                <li>Flowering and fruiting progress</li>
+                                <li>Expected harvest timing</li>
+                            </ul>
+                        </div>
+
+                        <div class="monitoring-step mb-3">
+                            <span class="step-number">5</span>
+                            <strong>Record Keeping</strong>
+                            <p class="mb-1">Maintain detailed records:</p>
+                            <ul class="small">
+                                <li>Daily observations and actions</li>
+                                <li>Fertilizer and pesticide applications</li>
+                                <li>Yield estimates</li>
+                                <li>Problems encountered and solutions</li>
+                            </ul>
+                        </div>
+
+                        <div class="alert alert-info small mt-3">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Pro Tip:</strong> Regular monitoring allows early detection of problems and timely interventions, significantly improving crop yields and quality.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        let currentLat = null;
+        let currentLon = null;
+
+        // Get user's location
+        function getLocation() {
+            const btn = document.getElementById('location-btn');
+            const btnText = document.getElementById('location-btn-text');
+            const originalText = btnText.textContent;
+
+            btn.disabled = true;
+            btnText.textContent = 'Getting your location...';
+
+            if (navigator.geolocation) {
+                document.getElementById('weather-description').textContent = 'Detecting location...';
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        currentLat = position.coords.latitude;
+                        currentLon = position.coords.longitude;
+                        console.log(`Location obtained: ${currentLat}, ${currentLon}`);
+
+                        btnText.textContent = `Location: ${currentLat.toFixed(4)}, ${currentLon.toFixed(4)}`;
+                        btn.classList.remove('btn-success');
+                        btn.classList.add('btn-info');
+
+                        fetchWeather(currentLat, currentLon);
+                    },
+                    (error) => {
+                        console.error("Geolocation error:", error);
+                        let errorMsg = "Location access denied. Using Nairobi, Kenya for demonstration.";
+
+                        if (error.code === 1) {
+                            errorMsg = "Location permission denied. Please allow location access or use manual coordinates.";
+                        } else if (error.code === 2) {
+                            errorMsg = "Location unavailable. Using default location.";
+                        } else if (error.code === 3) {
+                            errorMsg = "Location request timed out. Using default location.";
+                        }
+
+                        alert(errorMsg);
+
+                        // Fallback to Nairobi, Kenya for demonstration
+                        currentLat = -1.2864;
+                        currentLon = 36.8172;
+                        btnText.textContent = 'Using Nairobi, Kenya (Demo)';
+                        btn.classList.remove('btn-success');
+                        btn.classList.add('btn-warning');
+
+                        fetchWeather(currentLat, currentLon);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 15000,
+                        maximumAge: 300000
+                    }
+                );
+            } else {
+                alert("Geolocation is not supported by this browser. Using Nairobi, Kenya for demonstration.");
+                // Fallback to Nairobi, Kenya for demonstration
+                currentLat = -1.2864;
+                currentLon = 36.8172;
+                btnText.textContent = 'Geolocation not supported';
+                btn.classList.remove('btn-success');
+                btn.classList.add('btn-secondary');
+
+                fetchWeather(currentLat, currentLon);
+            }
+
+            setTimeout(() => {
+                btn.disabled = false;
+            }, 2000);
+        }
+
+        // Fetch weather data directly from Open-Meteo (CORS-friendly)
+        async function fetchWeather(lat, lon) {
+            try {
+                document.getElementById('weather-description').textContent = 'Fetching weather data...';
+
+                // Direct Open-Meteo API call (works with CORS)
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,precipitation&timezone=auto`;
+
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status);
+                }
+
+                const data = await response.json();
+                console.log('Weather data received:', data);
+
+                // Update current weather
+                document.getElementById('temperature').textContent = `${data.current.temperature_2m}°C`;
+                document.getElementById('humidity').textContent = `N/A`; // Not in simplified API
+                document.getElementById('wind-speed').textContent = `N/A`; // Not in simplified API
+
+                // Update weather icon based on weather code
+                const weatherIcon = getWeatherIcon(data.current.weather_code);
+                document.getElementById('weather-icon').textContent = weatherIcon;
+                document.getElementById('weather-description').textContent = getWeatherDescription(data.current.weather_code);
+
+                // Update 7-day forecast - need to fetch separately
+                await fetchForecast(lat, lon);
+
+                // Update real-time hourly data
+                await fetchHourlyData(lat, lon);
+
+                console.log('Weather data updated successfully');
+            } catch (error) {
+                console.error('Weather fetch error:', error);
+                document.getElementById('weather-description').textContent = 'Failed to load weather data';
+                alert('Failed to fetch weather data from Open-Meteo API. Please check your internet connection and try again.');
+            }
+        }
+
+        // Fetch 7-day forecast separately
+        async function fetchForecast(lat, lon) {
+            try {
+                const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=auto`;
+
+                const response = await fetch(forecastUrl);
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status);
+                }
+
+                const data = await response.json();
+                console.log('Forecast data received:', data);
+
+                // Update 7-day forecast
+                updateForecast(data.daily);
+            } catch (error) {
+                console.error('Forecast fetch error:', error);
+            }
+        }
+
+        // Fetch real-time hourly data
+        async function fetchHourlyData(lat, lon) {
+            try {
+                const hourlyUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,precipitation&timezone=auto`;
+
+                const response = await fetch(hourlyUrl);
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status);
+                }
+
+                const data = await response.json();
+                console.log('Hourly data received:', data.hourly.time.slice(0,5));
+                console.log('Hourly temperatures:', data.hourly.temperature_2m.slice(0,5));
+
+                // Update real-time data display
+                updateRealTimeData(data.hourly);
+
+                // Show the real-time container
+                document.getElementById('realtime-container').style.display = 'block';
+            } catch (error) {
+                console.error('Hourly data fetch error:', error);
+            }
+        }
+
+        // Update real-time hourly data
+        function updateRealTimeData(hourly) {
+            const realtimeContainer = document.getElementById('realtime-container');
+            if (!realtimeContainer) return;
+
+            // Show next 24 hours of data
+            const now = new Date();
+            const next24Hours = [];
+
+            for (let i = 0; i < 24 && i < hourly.time.length; i++) {
+                const time = new Date(hourly.time[i]);
+                const temp = hourly.temperature_2m[i];
+                const precip = hourly.precipitation[i];
+
+                next24Hours.push({
+                    time: time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+                    temperature: temp,
+                    precipitation: precip
+                });
+            }
+
+            // Display real-time data
+            let html = '<h6>Next 24 Hours Real-Time Data:</h6><div class="row">';
+            next24Hours.slice(0, 8).forEach(hour => {
+                html += `
+                    <div class="col-6 col-md-3 mb-2">
+                        <div class="card p-2" style="font-size: 0.8rem;">
+                            <div><strong>${hour.time}</strong></div>
+                            <div>${hour.temperature}°C</div>
+                            <div>🌧️ ${hour.precipitation}mm</div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            realtimeContainer.innerHTML = html;
+        }
+
+        function getWeatherIcon(code) {
+            const icons = {
+                0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
+                45: '🌫️', 48: '🌫️',
+                51: '🌦️', 53: '🌦️', 55: '🌦️',
+                61: '🌧️', 63: '🌧️', 65: '🌧️',
+                71: '❄️', 73: '❄️', 75: '❄️',
+                95: '⛈️', 96: '⛈️', 99: '⛈️'
+            };
+            return icons[code] || '⛅';
+        }
+
+        function getWeatherDescription(code) {
+            const descriptions = {
+                0: 'Clear sky', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
+                45: 'Foggy', 48: 'Depositing rime fog',
+                51: 'Light drizzle', 53: 'Moderate drizzle', 55: 'Dense drizzle',
+                61: 'Slight rain', 63: 'Moderate rain', 65: 'Heavy rain',
+                71: 'Slight snow', 73: 'Moderate snow', 75: 'Heavy snow',
+                95: 'Thunderstorm', 96: 'Thunderstorm with hail', 99: 'Heavy thunderstorm with hail'
+            };
+            return descriptions[code] || 'Unknown';
+        }
+
+        function updateForecast(daily) {
+            const container = document.getElementById('forecast-container');
+            container.innerHTML = '';
+
+            const days = ['Today', 'Tomorrow', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'];
+
+            for (let i = 0; i < 7; i++) {
+                const forecastItem = document.createElement('div');
+                forecastItem.className = 'forecast-item';
+                forecastItem.innerHTML = `
+                    <div><strong>${days[i]}</strong></div>
+                    <div>${getWeatherIcon(daily.weather_code[i])}</div>
+                    <div><small>${daily.temperature_2m_max[i]}°/${daily.temperature_2m_min[i]}°</small></div>
+                    <div><small>${daily.precipitation_sum[i]}mm</small></div>
+                `;
+                container.appendChild(forecastItem);
+            }
+        }
+
+        // AI Advice Form Handler
+        document.getElementById('ai-advice-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const cropType = document.getElementById('crop-type').value;
+            const soilConditions = document.getElementById('soil-conditions').value;
+
+            if (!cropType) {
+                alert('Please select a crop type');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/ai-advice', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        cropType,
+                        soilConditions,
+                        weatherData: currentLat && currentLon ? { lat: currentLat, lon: currentLon } : null
+                    })
+                });
+
+                const advice = await response.json();
+
+                // Display AI advice
+                const resultDiv = document.getElementById('ai-advice-result');
+                const recommendationsList = document.getElementById('recommendations-list');
+                const alertsSection = document.getElementById('alerts-section');
+
+                recommendationsList.innerHTML = '<ul>' +
+                    advice.recommendations.map(rec => `<li>${rec}</li>`).join('') +
+                    '</ul>';
+
+                if (advice.alerts && advice.alerts.length > 0) {
+                    alertsSection.innerHTML = '<div class="alert alert-warning"><strong>Alerts:</strong><ul>' +
+                        advice.alerts.map(alert => `<li>${alert}</li>`).join('') +
+                        '</ul></div>';
+                }
+
+                resultDiv.style.display = 'block';
+            } catch (error) {
+                console.error('AI advice error:', error);
+                alert('Failed to get AI advice. Please try again.');
+            }
+        });
+
+        // Image handling variables
+        let selectedImageFile = null;
+
+        // Handle image file selection
+        document.getElementById('crop-image').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                selectedImageFile = file;
+                displayImagePreview(file);
+            }
+        });
+
+        // Display image preview
+        function displayImagePreview(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('preview-img').src = e.target.result;
+                document.getElementById('image-preview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Open camera for taking photo
+        function openCamera() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        // Create camera modal
+                        createCameraModal(stream);
+                    })
+                    .catch(function(error) {
+                        console.error('Camera access error:', error);
+                        alert('Camera access denied. Please allow camera permissions or upload an image file instead.');
+                    });
+            } else {
+                alert('Camera not supported on this device. Please upload an image file instead.');
+            }
+        }
+
+        // Create camera modal
+        function createCameraModal(stream) {
+            // Remove existing modal if any
+            const existingModal = document.getElementById('camera-modal');
+            if (existingModal) existingModal.remove();
+
+            const modal = document.createElement('div');
+            modal.id = 'camera-modal';
+            modal.className = 'modal fade show';
+            modal.style.display = 'block';
+            modal.style.backgroundColor = 'rgba(0,0,0,0.8)';
+            modal.innerHTML = `
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Take Crop Photo</h5>
+                            <button type="button" class="btn-close" onclick="closeCameraModal()"></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <video id="camera-video" autoplay style="width: 100%; max-height: 400px;"></video>
+                            <canvas id="camera-canvas" style="display: none;"></canvas>
+                            <div class="mt-3">
+                                <button type="button" class="btn btn-success me-2" onclick="capturePhoto()">
+                                    <i class="fas fa-camera me-1"></i>Capture
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="closeCameraModal()">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+
+            // Set up video stream
+            const video = document.getElementById('camera-video');
+            video.srcObject = stream;
+        }
+
+        // Close camera modal
+        function closeCameraModal() {
+            const modal = document.getElementById('camera-modal');
+            if (modal) {
+                const video = document.getElementById('camera-video');
+                if (video && video.srcObject) {
+                    const stream = video.srcObject;
+                    const tracks = stream.getTracks();
+                    tracks.forEach(track => track.stop());
+                }
+                modal.remove();
+            }
+        }
+
+        // Capture photo from camera
+        function capturePhoto() {
+            const video = document.getElementById('camera-video');
+            const canvas = document.getElementById('camera-canvas');
+            const context = canvas.getContext('2d');
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            canvas.toBlob(function(blob) {
+                selectedImageFile = new File([blob], 'crop-photo.jpg', { type: 'image/jpeg' });
+                displayImagePreview(selectedImageFile);
+                closeCameraModal();
+            }, 'image/jpeg', 0.8);
+        }
+
+        // Health Analysis Form Handler
+        document.getElementById('health-analyze-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const symptoms = document.getElementById('crop-symptoms').value;
+            const environmentalFactors = document.getElementById('environmental-factors').value;
+            const cropType = document.getElementById('crop-type').value;
+
+            if (!symptoms && !selectedImageFile) {
+                alert('Please either describe the crop symptoms or upload/snap a crop image');
+                return;
+            }
+
+            // Show loading state
+            const resultDiv = document.getElementById('health-analysis-result');
+            const loadingDiv = document.getElementById('analysis-loading');
+            const diagnosisResult = document.getElementById('diagnosis-result');
+
+            resultDiv.style.display = 'block';
+            loadingDiv.style.display = 'block';
+            diagnosisResult.innerHTML = '';
+
+            try {
+                const formData = new FormData();
+                formData.append('symptoms', symptoms);
+                formData.append('cropType', cropType);
+                formData.append('environmentalFactors', environmentalFactors);
+
+                if (selectedImageFile) {
+                    formData.append('cropImage', selectedImageFile);
+                }
+
+                const response = await fetch('/api/health-analyze', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const analysis = await response.json();
+
+                // Hide loading, show results
+                loadingDiv.style.display = 'none';
+
+                // Display detailed health analysis
+                diagnosisResult.innerHTML = `
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-header bg-${analysis.severity === 'Low' ? 'success' : analysis.severity === 'Medium' ? 'warning' : 'danger'} text-white">
+                            <h6 class="mb-0">
+                                <i class="fas fa-stethoscope me-2"></i>
+                                AI Diagnosis Results
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h5 class="text-${analysis.severity === 'Low' ? 'success' : analysis.severity === 'Medium' ? 'warning' : 'danger'}">
+                                        ${analysis.diagnosis}
+                                    </h5>
+                                    <div class="mb-3">
+                                        <span class="badge bg-${analysis.severity === 'Low' ? 'success' : analysis.severity === 'Medium' ? 'warning' : 'danger'} fs-6">
+                                            Severity: ${analysis.severity}
+                                        </span>
+                                        <span class="badge bg-info ms-2 fs-6">
+                                            Recovery: ${analysis.recovery_time}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <div class="p-3 bg-light rounded">
+                                        <i class="fas fa-seedling fa-3x text-success mb-2"></i>
+                                        <p class="mb-0 small">Crop Health Analysis</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header bg-primary text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-tools me-2"></i>
+                                        Treatment Plan
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <ol class="mb-0">
+                                        ${analysis.treatment.map((step, index) =>
+                                            `<li class="mb-2">
+                                                <strong>Step ${index + 1}:</strong> ${step}
+                                            </li>`
+                                        ).join('')}
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-shield-alt me-2"></i>
+                                        Prevention Measures
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="mb-0">
+                                        ${analysis.prevention.map(measure =>
+                                            `<li class="mb-2">${measure}</li>`
+                                        ).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-sm mt-3">
+                        <div class="card-header bg-info text-white">
+                            <h6 class="mb-0">
+                                <i class="fas fa-user-md me-2"></i>
+                                Professional Consultation
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-0">${analysis.professional_help}</p>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-light border mt-3">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <i class="fas fa-robot fa-2x text-primary"></i>
+                            </div>
+                            <div class="col">
+                                <small class="text-muted">
+                                    <strong>AI Analysis Complete:</strong> This diagnosis is based on advanced AI analysis of your crop image and symptoms.
+                                    For critical cases, consult with local agricultural experts.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('Health analysis error:', error);
+                loadingDiv.style.display = 'none';
+                diagnosisResult.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h6><i class="fas fa-exclamation-triangle me-2"></i>Analysis Failed</h6>
+                        <p>Unable to analyze the crop image. Please try again or contact support.</p>
+                        <small class="text-muted">Error: ${error.message}</small>
+                    </div>
+                `;
+            }
+        });
+
+        // Initialize with user's location
+        window.onload = function() {
+            getLocation();
+        };
